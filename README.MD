@@ -121,5 +121,5 @@ Ambiente:
 Sempre ative o virtualenv antes de rodar o backend.
 
 Autor e Licença
-Projeto desenvolvido por Paulo Messias dos santos Borba
+Projeto desenvolvido por Paulo Messias dos Santos Borba
 Fique à vontade para utilizar como base de estudos ou adaptar em outros sistemas.
