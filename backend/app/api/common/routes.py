@@ -25,9 +25,9 @@ class APIRoot(Resource):
             'message': 'Product Management API v1.0',
             'version': '1.0',
             'endpoints': {
-                'products': '/api/v1/products/',
-                'coupons': '/api/v1/coupons/',
-                'health': '/api/v1/health/',
+                'products': '/api/products/',
+                'coupons': '/api/coupons/',
+                'health': '/api/health/',
                 'docs': '/api/docs/'
             }
         }
