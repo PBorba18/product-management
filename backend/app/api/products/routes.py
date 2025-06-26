@@ -1,4 +1,5 @@
 from flask import request, jsonify
+from flask import jsonify
 from flask_restx import Namespace, Resource, fields
 from app.services.product_service import ProductService
 from app.utils.decorators import handle_exceptions
@@ -27,10 +28,11 @@ product_output_model = products_ns.model('ProductOutput', {
     'stock': fields.Integer(description='Estoque atual'),
     'finalPrice': fields.Float(description='Preço com desconto (se aplicável)'),
     'isOutOfStock': fields.Boolean(description='Produto sem estoque'),
+    'is_active': fields.Boolean(description='Produto ativo'),
     'discount': fields.Raw(description='Informações do desconto ativo'),
     'hasCouponApplied': fields.Boolean(description='Possui cupom aplicado'),
-    'createdAt': fields.DateTime(description='Data de criação'),
-    'updatedAt': fields.DateTime(description='Data de atualização')
+    'created_at': fields.String(description='Data de criação'),  # ← MUDOU
+    'updated_at': fields.String(description='Data de atualização')  # ← MUDOU
 })
 
 product_list_model = products_ns.model('ProductList', {
@@ -63,11 +65,10 @@ class ProductListResource(Resource):
     @products_ns.param('sortOrder', 'Direção da ordenação', type=str, 
                       enum=['asc', 'desc'], default='asc')
     @products_ns.param('onlyOutOfStock', 'Apenas produtos sem estoque', type=bool)
-    @products_ns.marshal_with(product_list_model)
-    @handle_exceptions
+    #@handle_exceptions
     def get(self):
         """Lista produtos com filtros avançados e paginação"""
-        
+
         # Extrair e validar parâmetros
         filters = {
             'page': request.args.get('page', 1, type=int),
@@ -80,17 +81,30 @@ class ProductListResource(Resource):
             'sort_order': request.args.get('sortOrder', 'asc'),
             'only_out_of_stock': request.args.get('onlyOutOfStock', type=bool)
         }
-        
+
         logging.info(f"Listando produtos com filtros: {filters}")
-        
+
         # Chamar service
-        result = ProductService.list_products(filters)
-        
-        return {
+        result = ProductService.list_products_with_discount_info(filters)
+        print("DEBUG result:", result)
+
+        # Verificar se obteve dados válidos
+        if not result or 'products' not in result:
+            logging.error("Service retornou resultado inválido")
+            return {'data': [], 'meta': {}}, 200
+
+        # Montar resposta no formato certo
+        response_data = {
             'data': result['products'],
             'meta': result['meta']
         }
-    
+
+        logging.info(f"Response data keys: {list(response_data.keys())}")
+        logging.info(f"Data length: {len(response_data['data']) if response_data['data'] else 0}")
+
+        return response_data, 200
+
+       
     @products_ns.doc('create_product')
     @products_ns.expect(product_input_model, validate=True)
     @products_ns.marshal_with(product_output_model, code=201)

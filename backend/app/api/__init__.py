@@ -1,3 +1,5 @@
+from app.api.products.routes import products_ns
+
 def register_blueprints(api):
     """Registra todos os blueprints na API"""
 

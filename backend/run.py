@@ -18,13 +18,13 @@ if __name__ == '__main__':
     
     
           Endpoints disponíveis:
-    • API Base: http://localhost:{port}/api/v1/
+    • API Base: http://localhost:{port}/api/
     • Swagger UI: http://localhost:{port}/api/docs/
-    • Health Check: http://localhost:{port}/api/v1/health/
+    • Health Check: http://localhost:{port}/api/health/
     
     Recursos:
-    • Produtos: /api/v1/products/
-    • Cupons: /api/v1/coupons/
+    • Produtos: /api/products/
+    • Cupons: /api/coupons/
     """)
     
     app.run(

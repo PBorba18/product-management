@@ -39,8 +39,8 @@ coupon_response_model = coupons_ns.model('CouponResponse', {
     'is_valid': fields.Boolean(description='Se o cupom está válido'),
     'is_expired': fields.Boolean(description='Se o cupom está expirado'),
     'remaining_uses': fields.Integer(description='Usos restantes'),
-    'created_at': fields.String(description='Data de criação'),
-    'updated_at': fields.String(description='Data de atualização')
+    'createdAt': fields.String(description='Data de criação'),
+    'updatedAt': fields.String(description='Data de atualização')
 })
 
 @coupons_ns.route('/')
